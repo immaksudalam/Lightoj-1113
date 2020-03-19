@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define MAX (int)1e5
+#define pb push_back
+vector<int>adj[MAX];
+void bfs(int src, int y);
+
+int main()
+{
+    int node, egde, t, c;
+    cin>>node>>egde>>t>>c;
+    for(int i=0;i<egde; i++){
+        int a,b;
+        cin>>a>>b;
+        adj[a].pb(b);
+        adj[b].pb(a);
+    }
+
+    for(int i=1; i<=node; i++){
+        sort(adj[i].begin(), adj[i].end());
+    }
+    int x, y;
+    cin>>x>>y;
+    bfs(x,y);
+    return 0;
+
+}
+
+void bfs(int src, int y)
+{
+    bool vis[MAX]={false};
+    int level[MAX]={0};
+    int parent[MAX]={-1};
+    queue<int> q;
+    q.push(src);
+    level[src]=0;
+    parent[src]=0;
+    vis[src]=true;
+    while(!q.empty())
+    {
+        int u=q.front();
+        for(auto it = adj[u].begin(); it!= adj[u].end(); it++){
+            int v = *it;
+            if(!vis[v]){
+                level[v]=level[u]+1;
+                parent[v]=u;
+                vis[v]=true;
+                q.push(v);
+            }
+        }
+        q.pop();
+    }
+
+
+    vector<int>out;
+    int x= src;
+    out.push_back(y);
+    int now = y;
+    while(now!=x){
+        now = parent[now];
+        out.push_back(now);
+    }
+    reverse(out.begin(), out.end());
+    cout<<out.size()<<endl;
+    for(auto it=out.begin(); it!=out.end(); it++){
+        cout<<(*it)<<" ";
+    }
+    cout<<endl;
+    return;
+}
+
