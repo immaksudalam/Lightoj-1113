@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+ll p[100010], r[100010];
+void make_set(ll n)
+{
+    p[n]=n;
+    r[n]=1;
+}
+ll Find(ll n)
+{
+    if(p[n]!=n) p[n]= Find(p[n]);
+    return p[n];
+}
+ll joint_set(ll x, ll y)
+{
+    x = Find(x);
+    y= Find(y);
+    if(x!=y){
+        p[y]=x;
+        r[x]+=r[y];
+    }
+    return r[x];
+
+}
+int main()
+{
+    int t, n;
+    while(cin>>t>>n){
+    if(t==0 && n==0)return 0;
+    ll cnt =0;
+    map<string, ll>mp;
+        for(ll i=0; i<t; i++){
+        string a;
+        cin>>a;
+        if(mp.find(a)==mp.end()){
+            mp[a]=cnt++;
+            make_set(mp[a]);
+        }
+    }
+    ll ans=0;
+    for(int i=0; i<n; i++){
+        string a, b;
+        cin>>a>>b;
+        int x = mp[a];
+        int y = mp[b];
+        ans = joint_set(x,y);
+    }
+    cnt--;
+    for(int i=0; i<cnt; i++)
+    {
+        ans = max(ans, r[i]);
+    }
+    cout<<ans<<endl;
+    }
+}
+
